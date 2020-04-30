@@ -1,39 +1,42 @@
 # tinygo-flash
 
-(プログラムの概要説明)
+Still in development.  
 
-## Description
+This is a repository for fixing the problem of tinygo flash not working on Japanese windows.  
+Until it's merged into tinygo, it will serve as a workaround for the private version of the above problem.  
 
-(プログラムの動作説明)
+So far, I've only tested it in the following environments.  
 
-## Demo
-
-(gifアニメ等でのDemo)
-
-## Requirement
-
-(動作環境)
+* adafruit PyPortal
+* adafruit feather-m4
 
 ## Usage
 
-(使用方法)
+```
+$ tinygo-flash -port COM7 your_application.uf2
+```
 
 ## Installation
 
-(インストール方法)
+go get github.com/sago35/tinygo-flash
 
 ## Build
 
-ソースコードは、 `%GOPATH%/src/github.com/sago35/tinygo-flash/main.go` となるように配置してください。  
+```
+$ go build
+```
 
-`go run dist/make_dist.go VERSION` を実行すると、 ./dist/release 以下にファイルが作成されます。  
-release用にBuildする際は、Changes.mdに該当Versionの記載が必要です。  
+or
 
-    (例) release用にv1.2.3でbuild
-    $ go run dist/make_dist.go 1.2.3
+```
+$ go run dist/make_dist.go 1.2.3
+```
 
-    (例) 開発用にv1.2.3でbuild
-    $ go run dist/make_dist.go 1.2.3 --dev
+or
+
+```
+$ go run dist/make_dist.go 1.2.3 --dev
+```
 
 ### Environment
 
@@ -41,8 +44,6 @@ release用にBuildする際は、Changes.mdに該当Versionの記載が必要で
 * kingpin.v2
 
 ## Notice
-
-(注意)
 
 ## License
 
