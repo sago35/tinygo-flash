@@ -44,6 +44,11 @@ func (c *cli) Run(args []string) error {
 			return err
 		}
 		fmt.Println(port)
+
+		err = touchSerialPortAt1200bps(port)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

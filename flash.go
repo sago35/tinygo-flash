@@ -3,12 +3,16 @@ package main
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
+
+	"go.bug.st/serial"
 )
 
 // commandError is an error type to wrap os/exec.Command errors. This provides
@@ -78,6 +82,24 @@ func copyFile(src, dst string) error {
 	return os.Rename(dst+".tmp", dst)
 }
 
+func touchSerialPortAt1200bps(port string) (err error) {
+	retryCount := 3
+	for i := 0; i < retryCount; i++ {
+		// Open port
+		p, e := serial.Open(port, &serial.Mode{BaudRate: 1200})
+		if e != nil {
+			time.Sleep(1 * time.Second)
+			err = e
+			continue
+		}
+		defer p.Close()
+
+		p.SetDTR(false)
+		return nil
+	}
+	return fmt.Errorf("opening port: %s", err)
+}
+
 func flashUF2UsingMSD(volume, tmppath string) error {
 	// find standard UF2 info path
 	var infoPath string
@@ -140,7 +162,7 @@ func getDefaultPort() (port string, err error) {
 		portPath = "/dev/cuaU*"
 	case "windows":
 		cmd := exec.Command("wmic",
-			"PATH", "Win32_SerialPort", "WHERE", "Caption LIKE 'USB Serial%'", "GET", "DeviceID")
+			"PATH", "Win32_SerialPort", "WHERE", "Caption LIKE 'USB % (COM%)'", "GET", "DeviceID")
 
 		var out bytes.Buffer
 		cmd.Stdout = &out
