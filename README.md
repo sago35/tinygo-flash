@@ -13,7 +13,7 @@ So far, I've only tested it in the following environments.
 ## Usage
 
 ```
-$ tinygo-flash -port COM7 your_application.uf2
+$ tinygo-flash --port COM7 --target feather-m4 your_application.uf2
 ```
 
 ## Installation

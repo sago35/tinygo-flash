@@ -27,9 +27,9 @@ func (e *commandError) Error() string {
 	return e.Msg + " " + e.File + ": " + e.Err.Error()
 }
 
-func flash(target, msdFirmwareName string) error {
+func flash(port, target, msdFirmwareName string) error {
 	flashVolume := getFlashVolumeFromBuildTag(`pyportal`)
-	return _flash(flashVolume, msdFirmwareName)
+	return _flash(port, flashVolume, msdFirmwareName)
 }
 
 func getFlashVolumeFromBuildTag(target string) string {
@@ -45,8 +45,15 @@ func getFlashVolumeFromBuildTag(target string) string {
 	return ret
 }
 
-func _flash(flashVolume, tmppath string) error {
-	err := flashUF2UsingMSD(flashVolume, tmppath)
+func _flash(port, flashVolume, tmppath string) error {
+
+	err := touchSerialPortAt1200bps(port)
+	if err != nil {
+		return err
+	}
+	time.Sleep(3 * time.Second)
+
+	err = flashUF2UsingMSD(flashVolume, tmppath)
 	if err != nil {
 		return &commandError{"failed to flash", tmppath, err}
 	}
@@ -88,8 +95,29 @@ func touchSerialPortAt1200bps(port string) (err error) {
 		// Open port
 		p, e := serial.Open(port, &serial.Mode{BaudRate: 1200})
 		if e != nil {
+			//fmt.Println("DEBUG:", i, e.Error()) // <<-- debug print
+			//for j := 0; j < retryCount; j++ {
+			//	port, err := getDefaultPort()
+			//	if err != nil {
+			//		fmt.Println("  touch > get :", i, j, err.Error())
+			//	} else {
+			//		fmt.Println("  touch > get :", i, j, port)
+			//		break
+			//	}
+			//	time.Sleep(1 * time.Second)
+			//}
+			//time.Sleep(1 * time.Second)
+			//err = e
+			//continue
+			se, ok := e.(*serial.PortError)
+			if ok && se.Code() == serial.InvalidSerialPort {
+				// とりあえず OK とする
+				return nil
+			}
+
 			time.Sleep(1 * time.Second)
 			err = e
+			fmt.Printf("err: %d : %s\n", i, err.Error())
 			continue
 		}
 		defer p.Close()

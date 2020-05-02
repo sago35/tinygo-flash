@@ -18,7 +18,10 @@ type cli struct {
 }
 
 var (
-	app = kingpin.New(appName, appDescription)
+	app    = kingpin.New(appName, appDescription)
+	port   = app.Flag("port", "COM port").String()
+	target = app.Flag("target", "target").Required().Enum(`pyportal`, `feather-m4`, `trinket-m0`)
+	uf2    = app.Arg("uf2", "*.uf2").Required().ExistingFile()
 )
 
 // Run ...
@@ -39,13 +42,16 @@ func (c *cli) Run(args []string) error {
 
 	switch k {
 	default:
-		port, err := getDefaultPort()
-		if err != nil {
-			return err
+		if len(*port) == 0 {
+			p, err := getDefaultPort()
+			if err != nil {
+				return err
+			}
+			//fmt.Println(p)
+			*port = p
 		}
-		fmt.Println(port)
 
-		err = touchSerialPortAt1200bps(port)
+		err := flash(*port, *target, *uf2)
 		if err != nil {
 			return err
 		}
