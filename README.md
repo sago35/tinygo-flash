@@ -18,7 +18,9 @@ $ tinygo-flash --port COM7 --target feather-m4 your_application.uf2
 
 ## Installation
 
+```
 go get github.com/sago35/tinygo-flash
+```
 
 ## Build
 
