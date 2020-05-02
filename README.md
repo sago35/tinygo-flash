@@ -47,12 +47,6 @@ $ go run dist/make_dist.go 1.2.3 --dev
 
 ## Notice
 
-## License
-
-Copyright (c) 2020 sago35  
-Released under the MIT license  
-https://opensource.org/licenses/mit-license.php  
-
 ## Author
 
 sago35 - <sago35@gmail.com>
