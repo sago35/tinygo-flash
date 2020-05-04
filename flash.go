@@ -28,7 +28,7 @@ func (e *commandError) Error() string {
 }
 
 func flash(port, target, msdFirmwareName string) error {
-	flashVolume := getFlashVolumeFromBuildTag(`pyportal`)
+	flashVolume := getFlashVolumeFromBuildTag(target)
 	return _flash(port, flashVolume, msdFirmwareName)
 }
 
