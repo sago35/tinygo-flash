@@ -41,6 +41,8 @@ func getFlashVolumeFromBuildTag(target string) string {
 		ret = `FEATHERBOOT`
 	case `trinket-m0`:
 		ret = `TRINKETBOOT`
+	case `wioterminal`:
+		ret = `Arduino`
 	}
 	return ret
 }
