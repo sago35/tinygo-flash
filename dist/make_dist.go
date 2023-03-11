@@ -14,9 +14,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/alecthomas/kingpin/v2"
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/transform"
-	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
